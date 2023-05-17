@@ -1,0 +1,51 @@
+import os
+import csv
+# Changing direction & read csvfile.
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+election_data_csv=os.path.join("/Users/nguyentrinh/Documents/Github/PyPoll/Resources/election_data.csv")
+csvfile=open(election_data_csv,newline="") 
+csv_reader=csv.reader(csvfile,delimiter=',')
+csv_header=next(csvfile)
+# Define PyPoll's variable.
+count = 0
+candidatelist = []
+unique_candidate = []
+vote_count = []
+vote_percent = []
+# Each row was read after the header.
+for row in csv_reader:
+# Counting the total number of votes
+    count = count + 1
+# Using the append function to increment layers values and names to candidate in list.
+    candidatelist.append(row[2])
+# Indentifying the unique name in list and a;b;c are the total number of votes per candidate.
+for a in set(candidatelist):
+    unique_candidate.append(a)
+    b = candidatelist.count(a)
+    vote_count.append(b)
+    c = round((b/count)*100,3)
+    vote_percent.append(c)  
+# Counting the total of vote.    
+winning_vote_count = max(vote_count)
+winner = unique_candidate[vote_count.index(winning_vote_count)]
+# Printing the results.   
+print("Election Results")   
+print("-------------------------")
+print("Total Votes:" + str(count))    
+print("-------------------------")
+for j in range(len(unique_candidate)):
+    print(unique_candidate[j] + ":" + str(vote_percent[j]) +"% (" + str(vote_count[j])+")")
+    print("-------------------------")
+    print("The winner is:" + winner)
+    print("-------------------------")
+with open('election_results.txt', 'w') as text:
+    text.write("Election Results\n")
+    text.write("-----------------\n")
+    text.write("Total Votes:" + str(count) + "\n")
+    text.write("------------------\n")
+    for j in range(len(set(unique_candidate))):
+        text.write(unique_candidate[j] + ": " + str(vote_percent[j]) +"% (" + str(vote_count[j]) +")\n")
+    text.write("--------------------\n")
+    text.write("Winner:" + winner + "\n")
+    text.write("---------------------\n")
+
